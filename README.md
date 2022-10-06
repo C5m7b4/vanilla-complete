@@ -123,4 +123,22 @@ And you should have something like this:
 
 ![alt basic-webpack-setup](images/webpack-01.png)
 
+Now let's commit what we have created
 
+```js
+git add .
+git commit -m "add webpack basic setup"
+git push -u origin branch1
+```
+
+Now you should have your first real branch and you should see this on github:
+
+![alt first-pull-request](images/first-pull-request.png)
+
+After you merge in the pull request you want to check back out the master, do a pull to get the latest version of master and then create your next branch.
+
+```js
+git checkout master
+git pull
+git checkout -b branch2
+```
