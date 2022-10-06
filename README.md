@@ -475,3 +475,71 @@ Merge in your pull request and create a new branch
 git checkout master
 git pull git checkout -b branch4
 ```
+
+## branch 4
+
+Now let's stub out a little html that we can interact with with javascript:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vanilla JS</title>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>Welcome to Vanilla Javascript</h2>
+    <div class="new-item">
+      <div class="row">
+        <div class="col-2">
+          <label>Name:</label>
+          <input id="name" type="text" />
+        </div>
+        <div class="col-2">
+          <label>Size:</label>
+          <input type="text" id="size" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-2">
+          <label>Price:</label>
+          <input type="number" id="price" />
+        </div>
+        <div class="col-2">
+          <label>Category</label>
+          <div id="item-category"></div>
+        </div>
+      </div>
+      <div class="col-2">
+        <button class="btn" id="save-item">Save Item</button>
+      </div>
+    
+      <div id="filter" class="filter-div"></div>
+      <div id="items"></div>
+      <div id="stats"></div>
+    
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="../src/index.js"></script>
+</html>
+```
+
+That should be good enough for this branch. Let's save our work and commit it to the repo.
+
+```js
+git add .
+git commit -m "Add html body"
+git push -u origin branch4
+```
+
+Merge in your pull request and update the project to get ready for the next branch
+
+```js
+git checkout master
+git pull
+git checkout -b branch5
+```
