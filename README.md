@@ -721,3 +721,8 @@ Now let's add a license by going
 Once our license is added to the repo, we need to go out and get a badge for our license:
 
 [shields](https://shields.io/category/license)
+
+## branch 8
+
+Now let's log out our data just to make sure it's there. Now let's create that logic for changing our state and then wire up all the inputs so that they can affect state. Then we will actually build our table so that we actually have what looks like an app. We are going to need to add a little more style so our table looks ok though. Now we should have a pretty nice looking table.
+
