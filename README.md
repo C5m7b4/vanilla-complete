@@ -13,3 +13,21 @@ npx gitignore node
 ```
 
 Now let's create a repo on github and link everything up.
+
+```js
+git init
+git add .
+git commit -m "Initial commit"
+```
+
+Then just copy the git remote line that github provides you. It will look something like this:
+
+```js
+git remote add origin https://github.com/C5m7b4/vanilla-complete.git
+```
+
+And then finally we need to run this line in our bash:
+
+```js
+git push -u origin master
+```
