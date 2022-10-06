@@ -15,6 +15,15 @@ const state = {
   },
 };
 
+const buildDeleteLinks = () => {
+  const deletes = document.querySelectorAll("td[data-delete]");
+  for (let del of deletes) {
+    del.addEventListener("click", (e) => {
+      deleteItem(+e.currentTarget.id.substring(3));
+    });
+  }
+};
+
 const changeState = (element) => {
   const { id, value } = element.target;
   if (!isValid(value) || !isValid(id)) return;
@@ -89,3 +98,31 @@ const buildFilterBox = () => {
   newSelect.addEventListener("change", handleFilterChange);
 };
 buildFilterBox();
+
+buildDeleteLinks();
+
+const deleteItem = (id) => {
+  const itemIndex = state.items.findIndex((i) => i.id === id);
+  if (itemIndex && itemIndex >= 0) {
+    const copiedItems = Array.from(state.items);
+    copiedItems.splice(itemIndex, 1);
+    state.items = copiedItems;
+    filteredData = copiedItems;
+    buildTable();
+  }
+};
+
+// lets add curry to the mix
+const filterData = (property) => {
+  return function (value) {
+    return data.filter((i) => i[property] == value);
+  };
+};
+
+const curriedFilter = filterData("category");
+const fruits = curriedFilter("fruit");
+const bevs = curriedFilter("beverages");
+const candy = curriedFilter("candy");
+console.log("fruits", fruits);
+console.log("bevs", bevs);
+console.log("candy", candy);
