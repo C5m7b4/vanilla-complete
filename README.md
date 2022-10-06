@@ -278,3 +278,193 @@ git checkout master
 git pull
 git checkout -b branch3
 ```
+
+## branch 3
+
+It's time to setup eslint, which is also our buddy.
+
+```js
+npm install --save-dev eslint eslint-config-prettier eslint-plugin-import
+```
+
+We are also going to need one more package so that webpack knows about eslint
+
+```js
+npm install eslint-webpack-plugin --save-dev
+```
+
+Now we are going to update our webpack.config.js to look like this:
+
+```js
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const EsLintPlugin = require('eslint-webpack-plugin');
+
+module.exports = {
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
+  },
+  devtool: 'inline-source-map',
+  devServer: {
+    static: './dist',
+    port: 3007,
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Vanilla JS',
+      template: 'public/index.html',
+    }),
+    new MiniCssExtractPlugin(),
+    new EsLintPlugin(),
+  ],
+  resolve: {
+    extensions: ['.js'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+    ],
+  },
+};
+```
+
+Ok, making progress. Now let's create a file in the root of our project called .eslintrc.json and it should look something like this:
+
+```json
+{
+  "extends":[
+    "eslint:recommended",
+    "plugin:import/errors",
+    "prettier"
+  ],
+  "rules":{
+    "no-console": 0,
+    "no-debugger": 1,
+    "no-unused-vars": 1
+  },
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "env":{
+    "es6":true,
+    "browser": true,
+    "node": true,
+    "jest":true
+  }
+}
+```
+
+To break this down, and it's very simple setup, but we can expand on it over time. The exends does matter which order that you put them in. We can have lots of rules or just some simple ones. Our code usage might dictage which rules we would like to have and now let's see how this looks in reality.
+
+Go to your index.js and let's just add an unsed variable:
+
+```js
+const unused = '';
+```
+
+And it should look like this:
+
+![alt unused](images/unused-variable.png)
+
+If this isn't working, then you probably need to install the eslint plugin:
+
+![alt eslint-plugin](images/eslint-plugin.png)
+
+Now we need to take webpack for a test drive to see how it behaves with eslint. Kill you webpack instance and fire it back up to see how this behaves. What you should expect to see is something like this:
+
+![alt eslint-webpack-error](images/webpack-eslint-error.png)
+
+So, let's fix this and then we can commit this branch. Modigy your webpack.config.js to look like this:
+
+```js
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const EsLintPlugin = require("eslint-webpack-plugin");
+
+module.exports = {
+  mode: "development",
+  entry: "./src/index.js",
+  output: {
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist"),
+    clean: true,
+  },
+  devtool: "inline-source-map",
+  devServer: {
+    static: "./dist",
+    port: 3007,
+    compress: true,
+    client: {
+      overlay: false,
+    },
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: "Vanilla js",
+      template: "public/index.html",
+    }),
+    new MiniCssExtractPlugin(),
+    new EsLintPlugin(),
+  ],
+  resolve: {
+    extensions: [".js"],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env"],
+          },
+        },
+      },
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
+    ],
+  },
+};
+
+```
+Now you should only see eslint errors in your console:
+
+![alt eslint-console-error](images/eslint-console-error.png);
+
+Now let's commit what we have and create a new branch:
+
+```js
+git add .
+git commit -m "add eslint"
+git push -u origin branch3
+```
+
+Merge in your pull request and create a new branch
+
+```js
+git checkout master
+git pull git checkout -b branch3
+```
