@@ -466,5 +466,5 @@ Merge in your pull request and create a new branch
 
 ```js
 git checkout master
-git pull git checkout -b branch3
+git pull git checkout -b branch4
 ```
