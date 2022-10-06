@@ -669,3 +669,32 @@ git checkout master
 git pull
 git checkout -b branch6
 ```
+
+## branch 6
+
+Before we get started, we need to make sure that we add a test script to our package.json
+
+```js
+"test": "jest"
+```
+
+Now for the fun part. We are going to add CI to our project. Let's go to circleci.com and sign in with our github account and select our project
+
+![alt circleci-project](images/circleci-project.png)
+
+Pick the fast version
+
+![alt circleci-fast](images/circleci-fast.png)
+
+Click Setup Project
+
+![alt circleci-sample](images/circleci-node.png)
+
+Select Node from the options
+
+![alt commit-and-run](images/commit-and-run.png)
+
+Select Commit and Run. This setup will actually work out of the box for our purpose.
+
+![alt circleci-running](images/circleci-running.png)
+
