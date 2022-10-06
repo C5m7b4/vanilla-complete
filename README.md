@@ -727,3 +727,30 @@ Once our license is added to the repo, we need to go out and get a badge for our
 Now let's log out our data just to make sure it's there. Now let's create that logic for changing our state and then wire up all the inputs so that they can affect state. Then we will actually build our table so that we actually have what looks like an app. We are going to need to add a little more style so our table looks ok though. Now we should have a pretty nice looking table.
 
 Let's commit now and merge our pull request. Same as all the other times.
+
+## branch 9
+
+Now we are going to extend the Array prototype. We are we going to to that?
+With an array of numbers, we could do something like this:
+
+```js
+const arr = [1,2,3,4,5,6]
+arr.includes(4)
+```
+
+But if we have an array of objects we need a helper to get all the unique values
+
+```js
+Array.prototype.unique = function (field) {
+  const newArray = [];
+  this.forEach((record) => {
+    const { [field]: targetField } = record;
+    if (!newArray.includes(targetField)) {
+      newArray.push(targetField);
+    }
+  });
+  return newArray;
+};
+```
+
+Then we are going to build a filter for our table
