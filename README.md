@@ -1,5 +1,8 @@
 # vanilla complete
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/C5m7b4/vanilla-complete/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/C5m7b4/vanilla-complete/tree/master)
+![GitHub](https://img.shields.io/github/license/C5m7b4/vanilla-complete)
+
 This is an introductory course on vanilly javascript from scratch. We are going to build everything for a single page application from scratch. We are going to create an empty folder in our dev folder where we store our javascript projects and we are going to name i vanilla-complet. We are starting with our README.md file. Next we are going to generate our project using this line:
 
 ```js
@@ -699,3 +702,18 @@ Select Commit and Run. This setup will actually work out of the box for our purp
 ![alt circleci-running](images/circleci-running.png)
 
 Now let's merge that branch that CircleCi created for us
+
+## branch 7
+ Now let's add some style to our app, let's import our data and isValid function and create some temporary state.
+
+ Oh and let's not forget to get our badge. If we go to Circleci.com and click on the settings for our project, we can get the markdown to get a badge.
+
+![alt circleci-passing](images/circleci-passing.png)
+
+Now let's add a license by going
+[here](https://choosealicense.com/licenses/mit)
+
+Once our license is added to the repo, we need to go out and get a badge for our license:
+
+[shields](https://shields.io/category/license)
+
