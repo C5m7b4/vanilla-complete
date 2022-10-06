@@ -142,3 +142,139 @@ git checkout master
 git pull
 git checkout -b branch2
 ```
+
+## branch 2
+
+Now we need to tell webpack how to handle files:
+
+```js
+npm install --save-dev mini-css-extract-plugin
+npm install --save-dev babel-loader @babel/preset-env
+npm install --save-dev css-loader
+npm install @babel/core
+```
+
+Now let's update our webpack.config.js to look like this:
+
+```js
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
+  },
+  devtool: 'inline-source-map',
+  devServer: {
+    static: './dist',
+    port: 3007,
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Vanilla JS',
+      template: 'public/index.html',
+    }),
+    new MiniCssExtractPlugin(),
+  ],
+  resolve: {
+    extensions: ['.js'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+    ],
+  },
+};
+```
+
+Now we need to kill webpack by doing ctrl-c. Once it's stopped, we now need to setup an initial css file for our styling, but first we need to create the styles.css in our src folder and then get our google font information. You can pick whatever fonts you like. 
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Dongle&family=Mulish:wght@200;500&family=Nunito:wght@200;300;400;500;600;700;800;900&family=Poppins:wght@200&family=Roboto:wght@300;400;700&family=Rubik&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  font-family: 'Poppins', sans-serif;
+}
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+  background: #7b0c6e;
+  background: -webkit-linear-gradient(top left, #7b0c6e, #626cbe);
+  background: -moz-linear-gradient(top left, #7b0c6e, #626cbe);
+  background: linear-gradient(to bottom right, #7b0c6e, #626cbe);
+  color: #fff;
+}
+```
+
+Lastly we need to update our index.html to look like this:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vanilla Javascript</title>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>Welcome to vanilla javascript</h2>
+  </div>
+</body>
+</html>
+```
+
+Whalla, now if you start the project
+
+```js
+npm start
+```
+
+You should see this:
+
+![alt index-branch-2](images/index-branch-2.png)
+
+Alright, let's commit what we have
+
+```js
+git add .
+git commit -m "add loaders to webpack"
+git push -u origin branch2
+```
+
+You will see your pull request, so follow through with that and then checkout the master and create your new branch
+
+```js
+git checkout master
+git pull
+git checkout -b branch3
+```
