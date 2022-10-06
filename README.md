@@ -698,3 +698,4 @@ Select Commit and Run. This setup will actually work out of the box for our purp
 
 ![alt circleci-running](images/circleci-running.png)
 
+Now let's merge that branch that CircleCi created for us
