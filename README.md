@@ -543,3 +543,129 @@ git checkout master
 git pull
 git checkout -b branch5
 ```
+
+## branch 5
+
+Now we are going to add some data to our project just to get started.
+
+```js
+export const data = [
+  { id: 1, name: 'apple', price: 0.99, size: 'each', category: 'fruit' },
+  { id: 2, name: 'bananna', price: 1.1, size: 'each', category: 'fruit' },
+  { id: 3, name: 'grapes', price: 1.99, size: 'bundle', category: 'fruit' },
+  { id: 4, name: 'apple', price: 0.89, size: 'each', category: 'fruit' },
+  {
+    id: 5,
+    name: 'Dr. Pepper',
+    price: 1.09,
+    size: '12 oz',
+    category: 'beverages',
+  },
+  { id: 6, name: 'Mt. Dew', price: 4.99, size: '12 pk', category: 'beverages' },
+  { id: 7, name: 'Coke', price: 1.79, size: '2 Liter', category: 'beverages' },
+  { id: 8, name: 'Pepsi', price: 1.79, size: '2 Liter', category: 'beverages' },
+  { id: 9, name: 'Tic Tacs', price: 2.99, size: '12 oz', category: 'candy' },
+  { id: 10, name: 'Snickers', price: 1.59, size: 'bar', category: 'candy' },
+  { id: 11, name: 'Almond Joy', price: 1.69, size: 'bar', category: 'candy' },
+];
+```
+
+Now we are going to create a utils.js file in the src folder and we are going to create a helper function called isValid:
+
+```js
+export const isValid = (v) => {
+  if (typeof v !== 'undefined' && v !== null) return true;
+  return false;
+};
+```
+
+Then let's import that function into our index.js and create some initial state.
+
+```js
+console.log('coding is ready');
+import { data } from './data';
+import { isValid } from './utils';
+import './styles.css';
+
+let filteredData = data;
+
+const state = {
+  items: data,
+  currentItem: {
+    name: '',
+    size: '',
+    price: 0,
+    category: '',
+  },
+};
+```
+
+Now let's write some tests for our function. In order for us to do this, we are going to need to install Jest and Babel and then set them up.
+
+```js
+npm install jest --save-dev
+```
+
+Now let's create a file in the root of our project called .babelrc and it's contents will look like this:
+
+```js
+{
+  "presets": ["@babel/preset-env"]
+}
+```
+
+Now create a folder in the root of our project called tests and create a file with the name of utils.test.js
+
+These are going to be our initial tests:
+
+```js
+import { isValid } from "../src/utils";
+
+describe("isValid", () => {
+  test("should return false for undefined", () => {
+    expect(isValid(undefined)).toEqual(false);
+  });
+  test("shoudl return false for null values", () => {
+    expect(isValid(null)).toEqual(false);
+  });
+  test("should return true for an int", () => {
+    expect(isValid(1)).toEqual(true);
+  });
+  test("should return true for a string", () => {
+    expect(isValid("hello")).toEqual(true);
+  });
+  test("should return true for an array", () => {
+    expect(isValid([1, 2, 3])).toEqual(true);
+  });
+  test("should return true for an object", () => {
+    expect(isValid({ name: "mike" })).toEqual(true);
+  });
+});
+```
+
+We also need to make sure that we have the Jest plugin installed:
+
+![alt jest-plugin](images/jest-plugin.png)
+
+Since we just added jest, we are probably going to need to refresh vsCode:
+Press Ctrl-Shift-P and select reload
+
+![alt vscode-reload](images/vscode-reload.png)
+
+Now you should have green ticks next to each of your tests.
+
+Let's save our work and make a commit
+
+```js
+git add .
+git commit -m "add jest and babel"
+git push -u origin branch5
+```
+
+Merge you pull request and update the local project
+
+```js
+git checkout master
+git pull
+git checkout -b branch6
+```
