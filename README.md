@@ -393,7 +393,7 @@ Now we need to take webpack for a test drive to see how it behaves with eslint. 
 
 ![alt eslint-webpack-error](images/webpack-eslint-error.png)
 
-So, let's fix this and then we can commit this branch. Modigy your webpack.config.js to look like this:
+So, let's fix this and then we can commit this branch. Modify your webpack.config.js to look like this:
 
 ```js
 const path = require("path");
@@ -450,9 +450,16 @@ module.exports = {
 };
 
 ```
+
 Now you should only see eslint errors in your console:
 
 ![alt eslint-console-error](images/eslint-console-error.png);
+
+Now we just need to add a linting script to our package.json
+
+```js
+"lint": "eslint src/*.js"
+```
 
 Now let's commit what we have and create a new branch:
 
