@@ -1,5 +1,6 @@
 import axios from "axios";
 import { state } from "./index";
+import { formatMoney } from "./utils";
 
 export async function saveEdits() {
   let json = await axios({
@@ -31,7 +32,7 @@ export async function updateData() {
     data: {
       name: state.currentItem.name,
       size: state.currentItem.size,
-      price: state.currentItem.price,
+      price: formatMoney(state.currentItem.price),
       category: state.currentItem.category,
     },
   });

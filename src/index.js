@@ -23,10 +23,11 @@ export const state = {
     name: "",
     size: "",
     price: 0,
-    cagegory: "",
+    category: "",
   },
   priceSortDirection: "down",
   sortType: "price",
+  categories: [],
 };
 
 export const getTotal = () => {
@@ -36,7 +37,6 @@ export const getTotal = () => {
 };
 
 export const clearForm = () => {
-  debugger;
   Object.keys(state.currentItem).map((key) => {
     document.getElementById(key).value = "";
   });
@@ -251,6 +251,18 @@ for (let input of inputs) {
   input.addEventListener("change", changeState);
 }
 
+const getItemCategory = (c) => {
+  if (typeof c === "number") {
+    const categoryRecord = state.categories.find((cat) => cat.id === c)[0];
+    if (categoryRecord) {
+      return categoryRecord.name;
+    } else {
+      return "";
+    }
+  }
+  return c;
+};
+
 export const buildTable = () => {
   let html = `<table style="width: 90%; margin: 20px auto; color: #000">`;
   html += `<tr><th>Products</th><th>Size</th><th class="header-sort"><span>Price</span><span id="price-caret" class="chevron ${state.priceSortDirection}"</span></th><th>Category</th><th>Delete</th></tr>`;
@@ -258,7 +270,9 @@ export const buildTable = () => {
     const { name, id, price, category, size } = item;
     html += `<tr><td>${name}</td><td>${size}</td><td>${formatMoney(
       price
-    )}</td><td>${category}</td><td id="tr-${id}" style="cursor: pointer;" data-delete="${id}"><div style="text-align: center;" id="trash-${id}"</td></tr>`;
+    )}</td><td>${getItemCategory(
+      category
+    )}</td><td id="tr-${id}" style="cursor: pointer;" data-delete="${id}"><div style="text-align: center;" id="trash-${id}"</td></tr>`;
   });
   html += `<tr><td colspan="2"></td><td>${formatMoney(
     getTotal()
@@ -309,11 +323,12 @@ const saveItem = () => {
   const copiedItems = [...state.items, state.currentItem];
   state.items = copiedItems;
   filteredData = copiedItems;
-  buildTable();
+  // buildTable();
   clearForm();
   updateData()
     .then((res) => {
       console.log(res);
+      getOurData();
     })
     .catch((err) => {
       console.log(err);
@@ -388,20 +403,6 @@ function runSampleCode() {
 
   console.log(findJeffry(serialKillers));
 
-  const createItemCategory = () => {
-    const categories = data.unique("category");
-    let html = `<select id="category"><option value="0">Select a Category</option>`;
-    categories.map((c) => {
-      console.log("getting c for select box", c);
-      html += `<option value="${c}">${c}</option>`;
-    });
-    html += "</select";
-    document.getElementById("item-category").innerHTML = html;
-    const newSelect = document.getElementById("category");
-    newSelect.addEventListener("change", changeState);
-  };
-  createItemCategory();
-
   const buildFilterBox = () => {
     const categories = data.unique("category");
     let html =
@@ -421,7 +422,7 @@ function runCategoryCode() {
   const createItemCategory = () => {
     let html = `<select id="category"><option value="0">Select a Category</option>`;
     state.categories.map((c) => {
-      html += `<option value="${c.id}">${c.category}</option>`;
+      html += `<option value="${c.id}">${c.name}</option>`;
     });
     html += "</select";
     document.getElementById("item-category").innerHTML = html;
