@@ -843,3 +843,36 @@ M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .4
 ```
 
 Now we are going to add a chevron that allows us to sort by the price
+
+## branch 16
+
+Now let's build a web server so we can get our data from our local SQL server and not just use this in memory data store. But we are going to need to install a few more packages:
+
+```js
+npm install @babel/plugin-transform-runtime
+```
+
+This will give us access to async/await which is what we will use to fetch our data. We need to update our .babelrc file so that it looks like this:
+
+```js
+{
+  "presets": ["@babel/preset-env"],
+  "plugins": ["@babel/transform-runtime"]
+}
+```
+
+Then let's install the packages we need for our actual server
+
+```js
+npm install avion cors express mssql
+```
+
+After we code up the basic server, we need to add a command to our package.json. Let's also add a linting script just to have it and see what it does.
+
+```js
+"lint": "eslint src/*.js"
+"server": "node server/server.js"
+```
+
+Now we can start our server to see if it works
+Lets go to localhost:3000 and we should see some json if we have everything setup correctly.
