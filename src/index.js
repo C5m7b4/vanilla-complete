@@ -1,6 +1,6 @@
 console.log("you are ready to start coding");
 import { isValid, formatMoney } from "./utils";
-import { updateData, getData, getCategories } from "./api";
+import { updateData, getData, getCategories, deleteItemFromSql } from "./api";
 import Box from "./Box";
 import "./styles.css";
 
@@ -309,14 +309,18 @@ const handleFilterChange = (e) => {
 };
 
 const deleteItem = (id) => {
-  const itemIndex = state.items.findIndex((i) => i.id === id);
-  if (itemIndex && itemIndex >= 0) {
-    const copiedItems = Array.from(state.items);
-    copiedItems.splice(itemIndex, 1);
-    state.items = copiedItems;
-    filteredData = copiedItems;
-    buildTable();
-  }
+  deleteItemFromSql(id)
+    .then((res) => {
+      const j = res.data;
+      if (j.error === 0) {
+        getOurData();
+      } else {
+        console.log(j.msg);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const saveItem = () => {
