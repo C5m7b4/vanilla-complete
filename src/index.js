@@ -176,3 +176,54 @@ const candy = curriedFilter("candy");
 console.log("fruits", fruits);
 console.log("bevs", bevs);
 console.log("candy", candy);
+
+const findCategoryMostExpensiveItem = (array) => {
+  return array.reduce((acc, cur) => {
+    return acc.price > cur.price ? acc : cur;
+  }, 0);
+};
+
+const compose =
+  (...fns) =>
+  (...args) =>
+    fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
+
+const pipedFn = compose(
+  findCategoryMostExpensiveItem,
+  curriedFilter
+)("beverages");
+console.log(pipedFn);
+
+import Box from "./Box";
+const getFoodBetweenOneAndTwo = (data) =>
+  Box(data)
+    .map((x) => x.filter((f) => f.category === "beverages"))
+    .map((x) => x.filter((f) => f.price > 1.0))
+    .map((x) => x.filter((f) => f.price <= 2.0))
+    .map((x) => x.map((f) => f.price))
+    .map((x) => x.map((f) => parseFloat(f)))
+    .map((x) => x.reduce((a, c) => a + c))
+    .fold((x) => x);
+
+console.log("*****************");
+const r2 = getFoodBetweenOneAndTwo(state.items);
+console.log(r2);
+
+const serialKillers = [
+  {
+    boy: "jeffry",
+    faction: "bathhouse",
+  },
+  {
+    boy: "steven",
+    faction: "hitchhiker",
+  },
+];
+
+const findJeffry = (data) =>
+  Box(data)
+    .map((x) => x.filter((b) => b.faction === "bathhouse")[0])
+    .map((x) => x.boy)
+    .fold((x) => x);
+
+console.log(findJeffry(serialKillers));
