@@ -284,20 +284,6 @@ const handleFilterChange = (e) => {
   buildTable();
 };
 
-const buildFilterBox = () => {
-  const categories = data.unique("category");
-  let html =
-    '<select id="category-filter"><option value="0">Select a category to filter by</option>';
-  categories.map((c) => {
-    html += `<option value="${c}">${c}</option>`;
-  });
-  html += "</select>";
-  document.getElementById("filter").innerHTML = html;
-  const newSelect = document.getElementById("category-filter");
-  newSelect.addEventListener("change", handleFilterChange);
-};
-buildFilterBox();
-
 const deleteItem = (id) => {
   const itemIndex = state.items.findIndex((i) => i.id === id);
   if (itemIndex && itemIndex >= 0) {
@@ -326,19 +312,6 @@ const saveItem = () => {
 
 const saveButton = document.getElementById("save-item");
 saveButton.addEventListener("click", saveItem);
-
-const createItemCategory = () => {
-  const categories = data.unique("category");
-  let html = `<select id="category"><option value="0">Select a Category</option>`;
-  categories.map((c) => {
-    html += `<option value="${c}">${c}</option>`;
-  });
-  html += "</select";
-  document.getElementById("item-category").innerHTML = html;
-  const newSelect = document.getElementById("category");
-  newSelect.addEventListener("change", changeState);
-};
-createItemCategory();
 
 function runSampleCode() {
   // lets add curry to the mix
@@ -404,4 +377,31 @@ function runSampleCode() {
       .fold((x) => x);
 
   console.log(findJeffry(serialKillers));
+
+  const createItemCategory = () => {
+    const categories = data.unique("category");
+    let html = `<select id="category"><option value="0">Select a Category</option>`;
+    categories.map((c) => {
+      html += `<option value="${c}">${c}</option>`;
+    });
+    html += "</select";
+    document.getElementById("item-category").innerHTML = html;
+    const newSelect = document.getElementById("category");
+    newSelect.addEventListener("change", changeState);
+  };
+  createItemCategory();
+
+  const buildFilterBox = () => {
+    const categories = data.unique("category");
+    let html =
+      '<select id="category-filter"><option value="0">Select a category to filter by</option>';
+    categories.map((c) => {
+      html += `<option value="${c}">${c}</option>`;
+    });
+    html += "</select>";
+    document.getElementById("filter").innerHTML = html;
+    const newSelect = document.getElementById("category-filter");
+    newSelect.addEventListener("change", handleFilterChange);
+  };
+  buildFilterBox();
 }

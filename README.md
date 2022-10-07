@@ -887,3 +887,6 @@ Now we are going to see that there is a timing issue with functions trying to us
 
 Let's create a CustomEvent to tell us when our data is loaded and then we can put all the functions that need to have valid data to only execute within the context of that function. Now our code should be acting properly, so let's create another async function for updating the data. We will also have to update our server code. Notice also that our select boxes are broken now too. We'll handle that in the next branch
 
+## branch 19
+
+Let's first fix our select boxes so we can actually create an item. Now that we have fixed up our UI, can can use seperation of concerns and start to break our index.js into seperate files.
