@@ -31,4 +31,10 @@ describe("formatMoney", () => {
   test("should always return 2 decimal places", () => {
     expect(formatMoney(1.23456789)).toEqual("1.23");
   });
+  test("should handle an undefined value", () => {
+    expect(formatMoney(undefined)).toEqual("");
+  });
+  test("should handle a null value", () => {
+    expect(formatMoney(null)).toEqual("");
+  });
 });

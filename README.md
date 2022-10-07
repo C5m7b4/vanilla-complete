@@ -876,3 +876,9 @@ After we code up the basic server, we need to add a command to our package.json.
 
 Now we can start our server to see if it works
 Lets go to localhost:3000 and we should see some json if we have everything setup correctly.
+
+## branch 17
+
+Now we are going to create some async functions and see if we can get our data that way. Let's also add another feature to our formatMoney function so that it handles undefined values and then let's update our tests to test for this situation.
+
+Now we are going to see that there is a timing issue with functions trying to use our data before it was actually fetched. We will handle that with the next branch.

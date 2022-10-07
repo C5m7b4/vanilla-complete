@@ -1,9 +1,9 @@
 console.log("you are ready to start coding");
-import { data } from "./data";
 import { isValid, formatMoney } from "./utils";
+import axios from "axios";
 import "./styles.css";
 
-let filteredData = data;
+let data = [];
 
 const state = {
   items: data,
@@ -16,6 +16,36 @@ const state = {
   priceSortDirection: "down",
   sortType: "price",
 };
+
+async function getData() {
+  let json = await axios({
+    method: "GET",
+    cors: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    url: "http://localhost:3000",
+  });
+  return json;
+}
+
+getData()
+  .then((res) => {
+    const j = res.data;
+    if (j.error === 0) {
+      data = j.data;
+      filteredData = j.data;
+      state.items = j.data;
+      buildTable();
+    } else {
+      console.log(j.msg);
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+let filteredData = data;
 
 const getTotal = () => {
   return filteredData.reduce((acc, cur) => {
