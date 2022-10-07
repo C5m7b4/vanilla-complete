@@ -67,6 +67,33 @@ app.get("/categories", (req, res) => {
   }
 });
 
+app.delete("/", (req, res) => {
+  try {
+    const id = req.body.id;
+    if (!id) {
+      res.send({ error: 1, success: false, msg: "missing id" });
+      return;
+    }
+    var sql = require("mssql");
+    sql.connect(config, function (err) {
+      if (err) console.log(err);
+
+      var request = new sql.Request();
+      const query = "delete from items where id=" + id;
+      console.log(query);
+      request.query(query, function (err) {
+        if (err) console.log(err);
+        res.send({
+          error: 0,
+          success: true,
+        });
+      });
+    });
+  } catch (error) {
+    res.send({ error: 1, success: false, msg: error.message });
+  }
+});
+
 app.post("/", (req, res) => {
   try {
     const name = req.body.name;

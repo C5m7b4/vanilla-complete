@@ -907,3 +907,7 @@ This part is a little bit of chaos, but we can get through this. In the next bra
 
 Now we need to update our server so it can handle creating new items.
 We are going to add a helper function in case our category comes back as a number. We need a way to look it up and get the string value for that category, but if we change the order of operations in our code, we can solve this challenge another way.
+
+## branch 22
+
+Now we are going to change our code to handle deleting items from our sql server.

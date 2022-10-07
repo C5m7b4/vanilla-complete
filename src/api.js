@@ -62,3 +62,18 @@ export async function getCategories() {
   });
   return json;
 }
+
+export async function deleteItemFromSql(id) {
+  let json = await axios({
+    method: "DELETE",
+    cors: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    url: "http://localhost:3000",
+    data: {
+      id,
+    },
+  });
+  return json;
+}
