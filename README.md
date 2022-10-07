@@ -882,3 +882,8 @@ Lets go to localhost:3000 and we should see some json if we have everything setu
 Now we are going to create some async functions and see if we can get our data that way. Let's also add another feature to our formatMoney function so that it handles undefined values and then let's update our tests to test for this situation.
 
 Now we are going to see that there is a timing issue with functions trying to use our data before it was actually fetched. We will handle that with the next branch.
+
+## branch 18
+
+Let's create a CustomEvent to tell us when our data is loaded and then we can put all the functions that need to have valid data to only execute within the context of that function. Now our code should be acting properly, so let's create another async function for updating the data. We will also have to update our server code. Notice also that our select boxes are broken now too. We'll handle that in the next branch
+

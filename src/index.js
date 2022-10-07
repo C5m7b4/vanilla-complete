@@ -1,7 +1,15 @@
 console.log("you are ready to start coding");
 import { isValid, formatMoney } from "./utils";
 import axios from "axios";
+import Box from "./Box";
 import "./styles.css";
+
+// we need to add an event that will let us know when the data is finished loading
+const dataLoaded = new CustomEvent("onDataLoaded");
+window.addEventListener("onDataLoaded", () => {
+  console.log("onDataLoaded has been dispatched");
+  runSampleCode();
+});
 
 let data = [];
 
@@ -16,6 +24,24 @@ const state = {
   priceSortDirection: "down",
   sortType: "price",
 };
+
+async function updateData() {
+  let json = await axios({
+    method: "POST",
+    cors: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    url: "http://localhost:3000",
+    data: {
+      name: state.currentItem.name,
+      size: state.currentItem.size,
+      price: state.currentItem.price,
+      category: state.currentItem.category,
+    },
+  });
+  return json;
+}
 
 async function getData() {
   let json = await axios({
@@ -36,6 +62,7 @@ getData()
       data = j.data;
       filteredData = j.data;
       state.items = j.data;
+      window.dispatchEvent(dataLoaded);
       buildTable();
     } else {
       console.log(j.msg);
@@ -282,78 +309,19 @@ const deleteItem = (id) => {
   }
 };
 
-// lets add curry to the mix
-const filterData = (property) => {
-  return function (value) {
-    return data.filter((i) => i[property] == value);
-  };
-};
-
-const curriedFilter = filterData("category");
-const fruits = curriedFilter("fruit");
-const bevs = curriedFilter("beverages");
-const candy = curriedFilter("candy");
-console.log("fruits", fruits);
-console.log("bevs", bevs);
-console.log("candy", candy);
-
-const findCategoryMostExpensiveItem = (array) => {
-  return array.reduce((acc, cur) => {
-    return acc.price > cur.price ? acc : cur;
-  }, 0);
-};
-
-const compose =
-  (...fns) =>
-  (...args) =>
-    fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
-
-const pipedFn = compose(
-  findCategoryMostExpensiveItem,
-  curriedFilter
-)("beverages");
-console.log(pipedFn);
-
-import Box from "./Box";
-const getFoodBetweenOneAndTwo = (data) =>
-  Box(data)
-    .map((x) => x.filter((f) => f.category === "beverages"))
-    .map((x) => x.filter((f) => f.price > 1.0))
-    .map((x) => x.filter((f) => f.price <= 2.0))
-    .map((x) => x.map((f) => f.price))
-    .map((x) => x.map((f) => parseFloat(f)))
-    .map((x) => x.reduce((a, c) => a + c))
-    .fold((x) => x);
-
-console.log("*****************");
-const r2 = getFoodBetweenOneAndTwo(state.items);
-console.log(r2);
-
-const serialKillers = [
-  {
-    boy: "jeffry",
-    faction: "bathhouse",
-  },
-  {
-    boy: "steven",
-    faction: "hitchhiker",
-  },
-];
-
-const findJeffry = (data) =>
-  Box(data)
-    .map((x) => x.filter((b) => b.faction === "bathhouse")[0])
-    .map((x) => x.boy)
-    .fold((x) => x);
-
-console.log(findJeffry(serialKillers));
-
 const saveItem = () => {
   const copiedItems = [...state.items, state.currentItem];
   state.items = copiedItems;
   filteredData = copiedItems;
   buildTable();
   clearForm();
+  updateData()
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const saveButton = document.getElementById("save-item");
@@ -371,3 +339,69 @@ const createItemCategory = () => {
   newSelect.addEventListener("change", changeState);
 };
 createItemCategory();
+
+function runSampleCode() {
+  // lets add curry to the mix
+  const filterData = (property) => {
+    return function (value) {
+      return data.filter((i) => i[property] == value);
+    };
+  };
+
+  const curriedFilter = filterData("category");
+  const fruits = curriedFilter("fruits");
+  const bevs = curriedFilter("beverages");
+  const candy = curriedFilter("candy");
+  console.log("fruits", fruits);
+  console.log("bevs", bevs);
+  console.log("candy", candy);
+
+  const findCategoryMostExpensiveItem = (array) => {
+    return array.reduce((acc, cur) => {
+      return acc.price > cur.price ? acc : cur;
+    }, 0);
+  };
+  const compose =
+    (...fns) =>
+    (...args) =>
+      fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
+
+  const pipedFn = compose(
+    findCategoryMostExpensiveItem,
+    curriedFilter
+  )("beverages");
+  console.log(pipedFn);
+
+  const getFoodBetweenOneAndTwo = (data) =>
+    Box(data)
+      .map((x) => x.filter((f) => f.category === "beverages"))
+      .map((x) => x.filter((f) => f.price > 1.0))
+      .map((x) => x.filter((f) => f.price <= 2.0))
+      .map((x) => x.map((f) => f.price))
+      .map((x) => x.map((f) => parseFloat(f)))
+      .map((x) => x.reduce((a, c) => a + c))
+      .fold((x) => x);
+
+  console.log("*****************");
+  const r2 = getFoodBetweenOneAndTwo(state.items);
+  console.log(r2);
+
+  const serialKillers = [
+    {
+      boy: "jeffry",
+      faction: "bathhouse",
+    },
+    {
+      boy: "steven",
+      faction: "hitchhiker",
+    },
+  ];
+
+  const findJeffry = (data) =>
+    Box(data)
+      .map((x) => x.filter((b) => b.faction === "bathhouse")[0])
+      .map((x) => x.boy)
+      .fold((x) => x);
+
+  console.log(findJeffry(serialKillers));
+}
