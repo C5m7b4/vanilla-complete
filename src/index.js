@@ -1,6 +1,6 @@
 console.log("you are ready to start coding");
 import { data } from "./data";
-import { isValid } from "./utils";
+import { isValid, formatMoney } from "./utils";
 import "./styles.css";
 
 let filteredData = data;
@@ -35,7 +35,9 @@ const displayCheapestItem = () => {
   const cheapest = getCheapestItem();
   const div = document.createElement("div");
   div.id = divName;
-  div.innerHTML = `The cheapest item is ${cheapest.name} and it is ${cheapest.price}`;
+  div.innerHTML = `The cheapest item is ${
+    cheapest.name
+  } and it is ${formatMoney(cheapest.price)}`;
   parent.appendChild(div);
 };
 
@@ -59,7 +61,9 @@ const displayMostExpensive = () => {
   const highest = mostExpensive();
   const div = document.createElement("div");
   div.id = divName;
-  div.innerHTML = `The most expensive item is ${highest.name} and it is ${highest.price}`;
+  div.innerHTML = `The most expensive item is ${
+    highest.name
+  } and it is ${formatMoney(highest.price)}`;
   parent.appendChild(div);
 };
 
@@ -106,7 +110,9 @@ const buildTable = () => {
     "<tr><th>Products</th><th>Size</th><th>Price</th><th>Category</th><th>Delete</th></tr>";
   filteredData.map((item) => {
     const { name, id, price, category, size } = item;
-    html += `<tr><td>${name}</td><td>${size}</td><td>${price}</td><td>${category}</td><td id="tr-${id}" style="cursor: pointer;" data-delete="${id}">Delete</td></tr>`;
+    html += `<tr><td>${name}</td><td>${size}</td><td>${formatMoney(
+      price
+    )}</td><td>${category}</td><td id="tr-${id}" style="cursor: pointer;" data-delete="${id}">Delete</td></tr>`;
   });
   html += "</table>";
   document.getElementById("items").innerHTML = html;

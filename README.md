@@ -825,3 +825,8 @@ console.log(r2);
 ```
 
 We will break this function down piece by piece as we go through this course. Then we are going to look at another look at the Box. There is a funny story around this function, but it relates back to the Netflix show Dahmer.
+
+## branch 13
+
+Let's create a formatMoney function so we can clean up our numbers a little bit. Then let's write some tests to make sure our code is clean.
+
