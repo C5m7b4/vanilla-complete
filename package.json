@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack serve --open",
-    "test": "jest"
+    "lint": "eslint src/*.js",
+    "test": "jest",
+    "server": "node server/server.js"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +29,10 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "@babel/core": "^7.19.3"
+    "@babel/core": "^7.19.3",
+    "avion": "0.0.16",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "mssql": "^9.0.1"
   }
 }
