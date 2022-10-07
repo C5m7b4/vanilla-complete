@@ -191,6 +191,22 @@ const buildDeleteLinks = () => {
   }
 };
 
+// const addPlusSvg = () => {
+//   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+//   const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+//   svg.setAttribute("viewbox", "0 0 122.88 122.88");
+//   svg.setAttribute("height", "60px");
+//   svg.setAttribute("width", "60px");
+//   path.setAttribute(
+//     "d",
+//     "M0,0v60h60V0H0z M51,32H32v19h-4V32H9v-4h19V9h4v19h19V32z"
+//   );
+//   svg.appendChild(path);
+//   const div = document.getElementById("add-button");
+//   div.appendChild(svg);
+// };
+// addPlusSvg();
+
 const addSvg = () => {
   state.items.forEach((i) => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
