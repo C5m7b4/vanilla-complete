@@ -754,3 +754,26 @@ Array.prototype.unique = function (field) {
 ```
 
 Then we are going to build a filter for our table
+
+## branch 10
+
+Now we are going to create our delete links so we can actually delete items from our table. We'll test everything out and then we need to clean up our filter so that it looks a little better.
+
+Then just for fun, we are going to see what partial application looks like in javascript. This is just funsy though...
+
+```js
+// lets add curry to the mix
+const filterData = (property) => {
+  return function (value) {
+    return data.filter((i) => i[property] == value);
+  };
+};
+
+const curriedFilter = filterData('category');
+const fruits = curriedFilter('fruit');
+const bevs = curriedFilter('beverages');
+const candy = curriedFilter('candy');
+console.log('fruits', fruits);
+console.log('bevs', bevs);
+console.log('candy', candy);
+```
