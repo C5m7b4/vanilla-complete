@@ -1,4 +1,4 @@
-import { isValid } from "../src/utils";
+import { isValid, formatMoney } from "../src/utils";
 
 describe("isValid", () => {
   test("should return false for undefined", () => {
@@ -18,5 +18,17 @@ describe("isValid", () => {
   });
   test("should return true for an object", () => {
     expect(isValid({ name: "mike" })).toEqual(true);
+  });
+});
+
+describe("formatMoney", () => {
+  test("should return a dollar value if given 0", () => {
+    expect(formatMoney(0)).toEqual("0.00");
+  });
+  test("should return 2 decimal places when given 1", () => {
+    expect(formatMoney(1.1)).toEqual("1.10");
+  });
+  test("should always return 2 decimal places", () => {
+    expect(formatMoney(1.23456789)).toEqual("1.23");
   });
 });
