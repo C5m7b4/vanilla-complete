@@ -833,3 +833,13 @@ Let's create a formatMoney function so we can clean up our numbers a little bit.
 ## branch 14
 
 Now let's get all the totals for our table and add a row to display this for us. Then we are going to add the ability to add items to our table, but first we need another select field in our form. After we build or form Category component, we need to make a little change to our styles. Now we are ready to be able to save new items.
+
+## branch 15
+
+Now we are going to need a way to clear the form after we save, so let's write up that little snippet of code. Then let's change our delete text to an svg icon. Here is the path for the svg item:
+
+```js
+M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z
+```
+
+Now we are going to add a chevron that allows us to sort by the price

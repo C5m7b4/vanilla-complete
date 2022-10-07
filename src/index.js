@@ -13,12 +13,20 @@ const state = {
     price: 0,
     cagegory: "",
   },
+  priceSortDirection: "down",
+  sortType: "price",
 };
 
 const getTotal = () => {
   return filteredData.reduce((acc, cur) => {
     return acc + cur.price;
   }, 0);
+};
+
+const clearForm = () => {
+  Object.keys(state.currentItem).map((key) => {
+    document.getElementById(key).value = "";
+  });
 };
 
 const getCheapestItem = () => {
@@ -83,6 +91,57 @@ const buildDeleteLinks = () => {
   }
 };
 
+const addSvg = () => {
+  state.items.forEach((i) => {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    svg.setAttribute("viewbox", "0 0 24 24");
+    svg.setAttribute("height", "24px");
+    svg.setAttribute("width", "24px");
+
+    path.setAttribute(
+      "d",
+      "M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"
+    );
+    //path.setAttribute('fill', 'none');
+    svg.appendChild(path);
+    const div = document.getElementById("trash-" + i.id);
+    div.appendChild(svg);
+  });
+};
+
+const compare = (a, b) => {
+  const fieldA = a.price;
+  const fieldB = b.price;
+
+  let comparison = 0;
+  if (fieldA > fieldB) {
+    if (state.priceSortDirection == "down") {
+      comparison = 1;
+    } else {
+      comparison = -1;
+    }
+  } else if (fieldA < fieldB) {
+    if (state.priceSortDirection == "down") {
+      comparison = -1;
+    } else {
+      comparison = 1;
+    }
+  }
+  return comparison;
+};
+
+const sortData = () => {
+  const sortedData = [...filteredData].sort(compare);
+  filteredData = sortedData;
+  buildTable();
+};
+
+const assignCaretEvent = () => {
+  const caret = document.getElementById("price-caret");
+  caret.addEventListener("click", handleSortClick);
+};
+
 const changeState = (element) => {
   const { id, value } = element.target;
   if (!isValid(value) || !isValid(id)) return;
@@ -105,6 +164,21 @@ const setValue = (id, value) => {
   }
 };
 
+const handleSortClick = () => {
+  const caret = document.getElementById("price-caret");
+  caret.classList.remove("top");
+  caret.classList.remove("down");
+  sortData();
+  if (state.priceSortDirection == "down") {
+    state.priceSortDirection = "top";
+    caret.classList.add("top");
+  } else {
+    state.priceSortDirection = "down";
+    caret.classList.add("down");
+  }
+  caret.removeEventListener("click", handleSortClick);
+};
+
 const inputs = document.getElementsByTagName("input");
 for (let input of inputs) {
   input.addEventListener("change", changeState);
@@ -112,13 +186,12 @@ for (let input of inputs) {
 
 const buildTable = () => {
   let html = `<table style="width: 90%; margin: 20px auto; color: #000">`;
-  html +=
-    "<tr><th>Products</th><th>Size</th><th>Price</th><th>Category</th><th>Delete</th></tr>";
+  html += `<tr><th>Products</th><th>Size</th><th class="header-sort"><span>Price</span><span id="price-caret" class="chevron ${state.priceSortDirection}"</span></th><th>Category</th><th>Delete</th></tr>`;
   filteredData.map((item) => {
     const { name, id, price, category, size } = item;
     html += `<tr><td>${name}</td><td>${size}</td><td>${formatMoney(
       price
-    )}</td><td>${category}</td><td id="tr-${id}" style="cursor: pointer;" data-delete="${id}">Delete</td></tr>`;
+    )}</td><td>${category}</td><td id="tr-${id}" style="cursor: pointer;" data-delete="${id}"><div style="text-align: center;" id="trash-${id}"</td></tr>`;
   });
   html += `<tr><td colspan="2"></td><td>${formatMoney(
     getTotal()
@@ -128,6 +201,8 @@ const buildTable = () => {
   buildDeleteLinks();
   displayCheapestItem();
   displayMostExpensive();
+  addSvg();
+  assignCaretEvent();
 };
 
 buildTable();
@@ -248,6 +323,7 @@ const saveItem = () => {
   state.items = copiedItems;
   filteredData = copiedItems;
   buildTable();
+  clearForm();
 };
 
 const saveButton = document.getElementById("save-item");
