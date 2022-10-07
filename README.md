@@ -864,7 +864,7 @@ This will give us access to async/await which is what we will use to fetch our d
 Then let's install the packages we need for our actual server
 
 ```js
-npm install avion cors express mssql
+npm install axios cors express mssql
 ```
 
 After we code up the basic server, we need to add a command to our package.json. Let's also add a linting script just to have it and see what it does.
