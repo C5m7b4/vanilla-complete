@@ -15,6 +15,12 @@ window.addEventListener("onCategoriesLoaded", () => {
   runCategoryCode();
 });
 
+// create a toast container
+const toastContainer = document.createElement("div");
+toastContainer.id = "toastContainer";
+toastContainer.classList.add("toast-container");
+document.body.appendChild(toastContainer);
+
 let data = [];
 
 export const state = {
@@ -89,11 +95,11 @@ export const getOurData = () => {
         window.dispatchEvent(dataLoaded);
         buildTable();
       } else {
-        // createToast(j.msg, 'warning');
+        createToast(j.msg, "warning");
       }
     })
     .catch((err) => {
-      // createToast(err, 'Error');
+      createToast(err, "Error");
     });
 };
 
@@ -107,11 +113,11 @@ const getOurCategories = () => {
         state.categories = j.data;
         window.dispatchEvent(categoriesLoaded);
       } else {
-        // createToast(j.msg, 'Warning');
+        createToast(j.msg, "Warning");
       }
     })
     .catch((err) => {
-      // createToast(err, 'Error');
+      createToast(err, "Error");
     });
 };
 
@@ -435,3 +441,54 @@ function runCategoryCode() {
   };
   createItemCategory();
 }
+
+const createToast = (text, title = "", duration = 4000, type) => {
+  const toastElem = document.createElement("div");
+  toastElem.classList.add("toast");
+  if (type) toastElem.classList.add(type);
+
+  const titleElem = document.createElement("p");
+  titleElem.classList.add("t-title");
+  titleElem.innerHTML = title;
+  toastElem.appendChild(titleElem);
+
+  const textElem = document.createElement("p");
+  textElem.classList.add("t-text");
+
+  if (Array.isArray(text)) {
+    const s = text
+      .map((s) => {
+        if (typeof s == "object") {
+          return s.name;
+        } else {
+          return s;
+        }
+      })
+      .join(", ");
+    textElem.innerHTML = s;
+  } else {
+    textElem.innerHTML = text;
+  }
+  toastElem.appendChild(textElem);
+
+  const toastContainer = document.getElementById("toastContainer");
+  toastContainer.appendChild(toastElem);
+
+  setTimeout(() => {
+    toastElem.classList.add("active");
+  }, 1);
+
+  setTimeout(() => {
+    toastElem.classList.remove("active");
+    setTimeout(() => {
+      toastElem.remove();
+    }, 350);
+  }, duration);
+};
+
+const toastTest = () => {
+  createToast("hello bitches");
+};
+
+const toastButton = document.getElementById("toast-button");
+toastButton.addEventListener("click", toastTest);
