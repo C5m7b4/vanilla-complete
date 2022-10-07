@@ -890,3 +890,16 @@ Let's create a CustomEvent to tell us when our data is loaded and then we can pu
 ## branch 19
 
 Let's first fix our select boxes so we can actually create an item. Now that we have fixed up our UI, can can use seperation of concerns and start to break our index.js into seperate files.
+
+## branch 20
+
+Here we are going to create our api.js and put our network requests in here. Now we need to extract out our getTotal and clearForm functions so they can be imported. We are also going to need to install some more dependencies here.
+
+```js
+npm install --save-dev identity-obj-proxy
+npm install --save-dev jest-environment-jsdom
+npm install --save-dev babel-jest
+```
+
+This part is a little bit of chaos, but we can get through this. In the next branch we will add some toasts and make sure that we can save our new items that we created and make sure that our delete will work properly.
+

@@ -1,6 +1,16 @@
 import { isValid, formatMoney } from "../src/utils";
 
+// const ORIG_WINDOW_CUSTOM_EVENT = window.CustomEvent;
+
 describe("isValid", () => {
+  // afterAll(() => {
+  //   window.CustomEvent = ORIG_WINDOW_CUSTOM_EVENT;
+  // });
+
+  // beforeEach(() => {
+  //   window.CustomEvent = jest.fn();
+  // });
+
   test("should return false for undefined", () => {
     expect(isValid(undefined)).toEqual(false);
   });

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const Left = (x) => ({
   chain: () => Left(x),
   map: () => Left(x),

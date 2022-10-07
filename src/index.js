@@ -1,6 +1,6 @@
 console.log("you are ready to start coding");
 import { isValid, formatMoney } from "./utils";
-import axios from "axios";
+import { updateData, getData, getCategories } from "./api";
 import Box from "./Box";
 import "./styles.css";
 
@@ -10,10 +10,14 @@ window.addEventListener("onDataLoaded", () => {
   console.log("onDataLoaded has been dispatched");
   runSampleCode();
 });
+const categoriesLoaded = new CustomEvent("onCategoriesLoaded");
+window.addEventListener("onCategoriesLoaded", () => {
+  runCategoryCode();
+});
 
 let data = [];
 
-const state = {
+export const state = {
   items: data,
   currentItem: {
     name: "",
@@ -25,65 +29,98 @@ const state = {
   sortType: "price",
 };
 
-async function updateData() {
-  let json = await axios({
-    method: "POST",
-    cors: true,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    url: "http://localhost:3000",
-    data: {
-      name: state.currentItem.name,
-      size: state.currentItem.size,
-      price: state.currentItem.price,
-      category: state.currentItem.category,
-    },
-  });
-  return json;
-}
-
-async function getData() {
-  let json = await axios({
-    method: "GET",
-    cors: true,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    url: "http://localhost:3000",
-  });
-  return json;
-}
-
-getData()
-  .then((res) => {
-    const j = res.data;
-    if (j.error === 0) {
-      data = j.data;
-      filteredData = j.data;
-      state.items = j.data;
-      window.dispatchEvent(dataLoaded);
-      buildTable();
-    } else {
-      console.log(j.msg);
-    }
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
-let filteredData = data;
-
-const getTotal = () => {
+export const getTotal = () => {
   return filteredData.reduce((acc, cur) => {
-    return acc + cur.price;
+    return acc + +cur.price;
   }, 0);
 };
 
-const clearForm = () => {
+export const clearForm = () => {
+  debugger;
   Object.keys(state.currentItem).map((key) => {
     document.getElementById(key).value = "";
   });
+};
+
+export const compare = (a, b) => {
+  const fieldA = a[state.sortType];
+  const fieldB = b[state.sortType];
+
+  let descriptor = "priceSortDirection";
+  if (state.sortType == "name") {
+    descriptor = "nameSortDirection";
+  } else if (state.sortType == "size") {
+    descriptor = "sizeSortDirection";
+  } else if (state.sortType == "category") {
+    descriptor = "categorySortDirection";
+  }
+
+  let comparison = 0;
+  if (fieldA > fieldB) {
+    if (state[descriptor] == "down") {
+      comparison = 1;
+    } else {
+      comparison = -1;
+    }
+  } else if (fieldA < fieldB) {
+    if (state[descriptor] == "down") {
+      comparison = -1;
+    } else {
+      comparison = 1;
+    }
+  }
+  return comparison;
+};
+
+export const sortData = () => {
+  const sortedData = [...filteredData].sort(compare);
+  setFilteredData(sortedData);
+  buildTable();
+};
+
+export const getOurData = () => {
+  getData()
+    .then((res) => {
+      const j = res.data;
+      if (j.error === 0) {
+        data = j.data;
+        filteredData = j.data;
+        state.items = j.data;
+        window.dispatchEvent(dataLoaded);
+        buildTable();
+      } else {
+        // createToast(j.msg, 'warning');
+      }
+    })
+    .catch((err) => {
+      // createToast(err, 'Error');
+    });
+};
+
+getOurData();
+
+const getOurCategories = () => {
+  getCategories()
+    .then((res) => {
+      const j = res.data;
+      if (j.error === 0) {
+        state.categories = j.data;
+        window.dispatchEvent(categoriesLoaded);
+      } else {
+        // createToast(j.msg, 'Warning');
+      }
+    })
+    .catch((err) => {
+      // createToast(err, 'Error');
+    });
+};
+
+getOurCategories();
+
+export let filteredData = data;
+
+export const setFilteredData = (data) => {
+  filteredData = data;
 };
 
 const getCheapestItem = () => {
@@ -167,33 +204,6 @@ const addSvg = () => {
   });
 };
 
-const compare = (a, b) => {
-  const fieldA = a.price;
-  const fieldB = b.price;
-
-  let comparison = 0;
-  if (fieldA > fieldB) {
-    if (state.priceSortDirection == "down") {
-      comparison = 1;
-    } else {
-      comparison = -1;
-    }
-  } else if (fieldA < fieldB) {
-    if (state.priceSortDirection == "down") {
-      comparison = -1;
-    } else {
-      comparison = 1;
-    }
-  }
-  return comparison;
-};
-
-const sortData = () => {
-  const sortedData = [...filteredData].sort(compare);
-  filteredData = sortedData;
-  buildTable();
-};
-
 const assignCaretEvent = () => {
   const caret = document.getElementById("price-caret");
   caret.addEventListener("click", handleSortClick);
@@ -241,7 +251,7 @@ for (let input of inputs) {
   input.addEventListener("change", changeState);
 }
 
-const buildTable = () => {
+export const buildTable = () => {
   let html = `<table style="width: 90%; margin: 20px auto; color: #000">`;
   html += `<tr><th>Products</th><th>Size</th><th class="header-sort"><span>Price</span><span id="price-caret" class="chevron ${state.priceSortDirection}"</span></th><th>Category</th><th>Delete</th></tr>`;
   filteredData.map((item) => {
@@ -382,6 +392,7 @@ function runSampleCode() {
     const categories = data.unique("category");
     let html = `<select id="category"><option value="0">Select a Category</option>`;
     categories.map((c) => {
+      console.log("getting c for select box", c);
       html += `<option value="${c}">${c}</option>`;
     });
     html += "</select";
@@ -404,4 +415,18 @@ function runSampleCode() {
     newSelect.addEventListener("change", handleFilterChange);
   };
   buildFilterBox();
+}
+
+function runCategoryCode() {
+  const createItemCategory = () => {
+    let html = `<select id="category"><option value="0">Select a Category</option>`;
+    state.categories.map((c) => {
+      html += `<option value="${c.id}">${c.category}</option>`;
+    });
+    html += "</select";
+    document.getElementById("item-category").innerHTML = html;
+    const newSelect = document.getElementById("category");
+    newSelect.addEventListener("change", changeState);
+  };
+  createItemCategory();
 }
