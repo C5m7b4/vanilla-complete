@@ -781,3 +781,47 @@ console.log('candy', candy);
 ## branch 11
 
 Now lets dispay the cheapest and most expensive items below our table. We are going to have to make sure that we clean up after ourselves though.
+
+## branch 12
+
+Here we will look at another approach to getting the most expensive item
+
+```js
+const findCategoryMostExpensiveItem = (array) => {
+  return array.reduce((acc, cur) => {
+    return acc.price > cur.price ? acc : cur;
+  }, 0);
+};
+
+const compose =
+  (...fns) =>
+  (...args) =>
+    fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
+
+const pipedFn = compose(
+  findCategoryMostExpensiveItem,
+  curriedFilter
+)('beverages');
+console.log(pipedFn);
+```
+
+This is just exposing function composition. Let's also look at another way to gather data. We are going to use what's called a monad.
+
+```js
+import Box from "./Box";
+const getFoodBetweenOneAndTwo = (data) =>
+  Box(data)
+    .map((x) => x.filter((f) => f.category === "beverages"))
+    .map((x) => x.filter((f) => f.price > 1.0))
+    .map((x) => x.filter((f) => f.price <= 2.0))
+    .map((x) => x.map((f) => f.price))
+    .map((x) => x.map((f) => parseFloat(f)))
+    .map((x) => x.reduce((a, c) => a + c))
+    .fold((x) => x);
+
+console.log("*****************");
+const r2 = getFoodBetweenOneAndTwo(data);
+console.log(r2);
+```
+
+We will break this function down piece by piece as we go through this course. Then we are going to look at another look at the Box. There is a funny story around this function, but it relates back to the Netflix show Dahmer.
