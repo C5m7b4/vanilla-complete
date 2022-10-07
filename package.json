@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack serve --open",
     "lint": "eslint src/*.js",
-    "test": "jest --experimental-vm-modules",
+    "test": "jest",
     "server": "node server/server.js"
   },
   "keywords": [],

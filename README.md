@@ -902,4 +902,3 @@ npm install --save-dev babel-jest
 ```
 
 This part is a little bit of chaos, but we can get through this. In the next branch we will add some toasts and make sure that we can save our new items that we created and make sure that our delete will work properly.
-
