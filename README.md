@@ -830,3 +830,6 @@ We will break this function down piece by piece as we go through this course. Th
 
 Let's create a formatMoney function so we can clean up our numbers a little bit. Then let's write some tests to make sure our code is clean.
 
+## branch 14
+
+Now let's get all the totals for our table and add a row to display this for us. Then we are going to add the ability to add items to our table, but first we need another select field in our form. After we build or form Category component, we need to make a little change to our styles. Now we are ready to be able to save new items.
