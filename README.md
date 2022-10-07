@@ -777,3 +777,7 @@ console.log('fruits', fruits);
 console.log('bevs', bevs);
 console.log('candy', candy);
 ```
+
+## branch 11
+
+Now lets dispay the cheapest and most expensive items below our table. We are going to have to make sure that we clean up after ourselves though.
