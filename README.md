@@ -920,3 +920,62 @@ Now we are going to introduce our version of toasts into the application.
 
 In this branch we are going to create a modal window so we can add categories
 First we need to modify our index.html a little bit.
+
+![alt modal-html-change](images/modal-html-changes.png)
+
+We also need to add another endpoint to our server:
+
+```js
+app.post("/category", (req, res) => {
+  try {
+    const name = req.body.name;
+    if (!name) {
+      res.send({ error: 2, success: false, msg: "Missing name parameter" });
+      return;
+    }
+    console.log(name);
+
+    var sql = require("mssql");
+    sql.connect(config, function (err) {
+      if (err) console.log(err);
+
+      var request = new sql.Request();
+      var query = `insert into categories (name) values ('${name}')`;
+      console.log(query);
+
+      request.query(query, function (err, recordset) {
+        if (err) console.log(err);
+
+        res.send({
+          error: 0,
+          success: true,
+          data: recordset,
+        });
+      });
+    });
+  } catch (error) {
+    res.send({ error: 1, success: false, msg: error.message });
+  }
+});
+```
+
+then we are going to add another function to our api:
+
+```js
+export async function sendCategory(name) {
+  let json = await axios({
+    method: "POST",
+    cors: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    url: "http://localhost:3000/category",
+    data: {
+      name,
+    },
+  });
+  return json;
+}
+```
+
+Then we just need to import the sendCategory function into our index.js and write a little code to handle sending and closing the modal window.
