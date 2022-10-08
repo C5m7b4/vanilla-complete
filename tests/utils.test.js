@@ -1,4 +1,5 @@
-import { isValid, formatMoney } from "../src/utils";
+import { isValid, formatMoney, getTotal } from "../src/utils";
+import { data } from "../src/data";
 
 // const ORIG_WINDOW_CUSTOM_EVENT = window.CustomEvent;
 
@@ -46,5 +47,21 @@ describe("formatMoney", () => {
   });
   test("should handle a null value", () => {
     expect(formatMoney(null)).toEqual("");
+  });
+});
+
+describe("getTotal", () => {
+  // we'll use our previous fake data for this
+  test("should total fruit", () => {
+    const fruit = data.filter((i) => i.category === "fruit");
+    expect(getTotal(fruit)).toEqual(4.97);
+  });
+  test("should total beverages", () => {
+    const bev = data.filter((i) => i.category === "beverages");
+    expect(getTotal(bev)).toEqual(9.66);
+  });
+  test("should total candy", () => {
+    const candy = data.filter((i) => i.category === "candy");
+    expect(getTotal(candy)).toEqual(6.27);
   });
 });

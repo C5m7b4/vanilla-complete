@@ -21,3 +21,9 @@ export const formatMoney = (input) => {
   }
   return "0.00";
 };
+
+export const getTotal = (filteredData) => {
+  return filteredData.reduce((acc, cur) => {
+    return acc + +cur.price;
+  }, 0);
+};

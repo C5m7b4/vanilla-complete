@@ -1,5 +1,5 @@
 console.log("you are ready to start coding");
-import { isValid, formatMoney } from "./utils";
+import { isValid, formatMoney, getTotal } from "./utils";
 import {
   updateData,
   getData,
@@ -8,6 +8,7 @@ import {
   sendCategory,
 } from "./api";
 import Box from "./Box";
+import { createToast } from "./toast";
 import "./styles.css";
 
 // we need to add an event that will let us know when the data is finished loading
@@ -43,7 +44,6 @@ export const state = {
 };
 
 const saveCategoryToServer = () => {
-  debugger;
   const categoryName = document.getElementById("add-category-input").value;
   sendCategory(categoryName)
     .then((res) => {
@@ -60,12 +60,6 @@ const saveCategoryToServer = () => {
     .catch((err) => {
       createToast(err.message, "Error");
     });
-};
-
-export const getTotal = () => {
-  return filteredData.reduce((acc, cur) => {
-    return acc + +cur.price;
-  }, 0);
 };
 
 export const clearForm = () => {
@@ -323,7 +317,7 @@ export const buildTable = () => {
     )}</td><td id="tr-${id}" style="cursor: pointer;" data-delete="${id}"><div style="text-align: center;" id="trash-${id}"></div></td></tr>`;
   });
   html += `<tr><td colspan="2"></td><td>${formatMoney(
-    getTotal()
+    getTotal(filteredData)
   )}</td><td colspan="2"></td></tr>`;
   html += "</table>";
   document.getElementById("items").innerHTML = html;
@@ -484,50 +478,6 @@ function runCategoryCode() {
   };
   createItemCategory();
 }
-
-const createToast = (text, title = "", duration = 4000, type) => {
-  const toastElem = document.createElement("div");
-  toastElem.classList.add("toast");
-  if (type) toastElem.classList.add(type);
-
-  const titleElem = document.createElement("p");
-  titleElem.classList.add("t-title");
-  titleElem.innerHTML = title;
-  toastElem.appendChild(titleElem);
-
-  const textElem = document.createElement("p");
-  textElem.classList.add("t-text");
-
-  if (Array.isArray(text)) {
-    const s = text
-      .map((s) => {
-        if (typeof s == "object") {
-          return s.name;
-        } else {
-          return s;
-        }
-      })
-      .join(", ");
-    textElem.innerHTML = s;
-  } else {
-    textElem.innerHTML = text;
-  }
-  toastElem.appendChild(textElem);
-
-  const toastContainer = document.getElementById("toastContainer");
-  toastContainer.appendChild(toastElem);
-
-  setTimeout(() => {
-    toastElem.classList.add("active");
-  }, 1);
-
-  setTimeout(() => {
-    toastElem.classList.remove("active");
-    setTimeout(() => {
-      toastElem.remove();
-    }, 350);
-  }, duration);
-};
 
 const toastTest = () => {
   createToast("hello bitches");
