@@ -979,3 +979,11 @@ export async function sendCategory(name) {
 ```
 
 Then we just need to import the sendCategory function into our index.js and write a little code to handle sending and closing the modal window.
+
+## branch 26
+
+Now let's refactor out code as best as we can to try to clean it up a little bit.
+The first thing we are going to do is move the createToast code out into it's own file.
+Now let's move the getTotal function into the utils folder and start to write some tests. Here we can also introduce debugging for our app.
+
+![alt getTotal-tests](images/get-total-tests.png)
