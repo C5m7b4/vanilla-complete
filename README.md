@@ -994,3 +994,14 @@ Let's try to keep refactoring and adding tests where possible
 Let's move our getItemCategory into the utils and make sure we haven't broken anything. Then we can write some tests, but we are going to need to log out a representation of our state so we can mock that up in our tests.
 
 ![alt get-item-category-tests](images/get-item-category-tests.png)
+
+## branch 28
+
+We are going to try to bring in avion and make some updates to that package. We are going to use this project to test our changes.
+
+```js
+npm install avion react
+```
+
+I switched over all the api calls to use avion and everthing seems to still be working. This is running avion version 0.0.16.
+
