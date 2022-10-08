@@ -1,17 +1,15 @@
-import { isValid, formatMoney, getTotal } from "../src/utils";
+import { isValid, formatMoney, getTotal, getItemCategory } from "../src/utils";
 import { data } from "../src/data";
 
-// const ORIG_WINDOW_CUSTOM_EVENT = window.CustomEvent;
+const testState = {
+  categories: [
+    { id: 1, name: "fruits" },
+    { id: 2, name: "beverages" },
+    { id: 3, name: "candy" },
+  ],
+};
 
 describe("isValid", () => {
-  // afterAll(() => {
-  //   window.CustomEvent = ORIG_WINDOW_CUSTOM_EVENT;
-  // });
-
-  // beforeEach(() => {
-  //   window.CustomEvent = jest.fn();
-  // });
-
   test("should return false for undefined", () => {
     expect(isValid(undefined)).toEqual(false);
   });
@@ -63,5 +61,17 @@ describe("getTotal", () => {
   test("should total candy", () => {
     const candy = data.filter((i) => i.category === "candy");
     expect(getTotal(candy)).toEqual(6.27);
+  });
+});
+
+describe("getItemCategory", () => {
+  test("should get fruit when given the id of 1", () => {
+    expect(getItemCategory(1, testState)).toEqual("fruits");
+  });
+  test("should get beverages when given the id of 2", () => {
+    expect(getItemCategory(2, testState)).toEqual("beverages");
+  });
+  test("should get candy when given the id of 3", () => {
+    expect(getItemCategory(3, testState)).toEqual("candy");
   });
 });

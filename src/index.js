@@ -1,5 +1,5 @@
 console.log("you are ready to start coding");
-import { isValid, formatMoney, getTotal } from "./utils";
+import { isValid, formatMoney, getTotal, getItemCategory } from "./utils";
 import {
   updateData,
   getData,
@@ -132,6 +132,7 @@ const getOurCategories = () => {
       if (j.error === 0) {
         state.categories = j.data;
         window.dispatchEvent(categoriesLoaded);
+        console.log("new category state", state);
       } else {
         createToast(j.msg, "Warning");
       }
@@ -211,22 +212,6 @@ const buildDeleteLinks = () => {
   }
 };
 
-// const addPlusSvg = () => {
-//   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-//   const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-//   svg.setAttribute("viewbox", "0 0 122.88 122.88");
-//   svg.setAttribute("height", "60px");
-//   svg.setAttribute("width", "60px");
-//   path.setAttribute(
-//     "d",
-//     "M0,0v60h60V0H0z M51,32H32v19h-4V32H9v-4h19V9h4v19h19V32z"
-//   );
-//   svg.appendChild(path);
-//   const div = document.getElementById("add-button");
-//   div.appendChild(svg);
-// };
-// addPlusSvg();
-
 const addSvg = () => {
   state.items.forEach((i) => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -293,18 +278,6 @@ for (let input of inputs) {
   input.addEventListener("change", changeState);
 }
 
-const getItemCategory = (c) => {
-  if (typeof c === "number") {
-    const categoryRecord = state.categories.find((cat) => cat.id === c)[0];
-    if (categoryRecord) {
-      return categoryRecord.name;
-    } else {
-      return "";
-    }
-  }
-  return c;
-};
-
 export const buildTable = () => {
   let html = `<table style="width: 90%; margin: 20px auto; color: #000">`;
   html += `<tr><th>Products</th><th>Size</th><th class="header-sort"><span>Price</span><span id="price-caret" class="chevron ${state.priceSortDirection}"</span></th><th>Category</th><th>Delete</th></tr>`;
@@ -313,7 +286,8 @@ export const buildTable = () => {
     html += `<tr><td>${name}</td><td>${size}</td><td>${formatMoney(
       price
     )}</td><td>${getItemCategory(
-      category
+      category,
+      state
     )}</td><td id="tr-${id}" style="cursor: pointer;" data-delete="${id}"><div style="text-align: center;" id="trash-${id}"></div></td></tr>`;
   });
   html += `<tr><td colspan="2"></td><td>${formatMoney(

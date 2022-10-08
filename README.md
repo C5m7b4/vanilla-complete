@@ -987,3 +987,8 @@ The first thing we are going to do is move the createToast code out into it's ow
 Now let's move the getTotal function into the utils folder and start to write some tests. Here we can also introduce debugging for our app.
 
 ![alt getTotal-tests](images/get-total-tests.png)
+
+## branch 27
+
+Let's try to keep refactoring and adding tests where possible
+Let's move our getItemCategory into the utils and make sure we haven't broken anything. Then we can write some tests, but we are going to need to log out a representation of our state so we can mock that up in our tests.
