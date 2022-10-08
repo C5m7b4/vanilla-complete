@@ -992,3 +992,5 @@ Now let's move the getTotal function into the utils folder and start to write so
 
 Let's try to keep refactoring and adding tests where possible
 Let's move our getItemCategory into the utils and make sure we haven't broken anything. Then we can write some tests, but we are going to need to log out a representation of our state so we can mock that up in our tests.
+
+![alt get-item-category-tests](images/get-item-category-tests.png)
