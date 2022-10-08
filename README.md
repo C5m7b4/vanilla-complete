@@ -915,3 +915,8 @@ Now we are going to change our code to handle deleting items from our sql server
 ## branch 23
 
 Now we are going to introduce our version of toasts into the application.
+
+## branch 25
+
+In this branch we are going to create a modal window so we can add categories
+First we need to modify our index.html a little bit.

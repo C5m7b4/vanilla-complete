@@ -94,6 +94,38 @@ app.delete("/", (req, res) => {
   }
 });
 
+app.post("/category", (req, res) => {
+  try {
+    const name = req.body.name;
+    if (!name) {
+      res.send({ error: 2, success: false, msg: "Missing name parameter" });
+      return;
+    }
+    console.log(name);
+
+    var sql = require("mssql");
+    sql.connect(config, function (err) {
+      if (err) console.log(err);
+
+      var request = new sql.Request();
+      var query = `insert into categories (name) values ('${name}')`;
+      console.log(query);
+
+      request.query(query, function (err, recordset) {
+        if (err) console.log(err);
+
+        res.send({
+          error: 0,
+          success: true,
+          data: recordset,
+        });
+      });
+    });
+  } catch (error) {
+    res.send({ error: 1, success: false, msg: error.message });
+  }
+});
+
 app.post("/", (req, res) => {
   try {
     const name = req.body.name;

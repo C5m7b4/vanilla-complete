@@ -1,6 +1,12 @@
 console.log("you are ready to start coding");
 import { isValid, formatMoney } from "./utils";
-import { updateData, getData, getCategories, deleteItemFromSql } from "./api";
+import {
+  updateData,
+  getData,
+  getCategories,
+  deleteItemFromSql,
+  sendCategory,
+} from "./api";
 import Box from "./Box";
 import "./styles.css";
 
@@ -34,6 +40,26 @@ export const state = {
   priceSortDirection: "down",
   sortType: "price",
   categories: [],
+};
+
+const saveCategoryToServer = () => {
+  debugger;
+  const categoryName = document.getElementById("add-category-input").value;
+  sendCategory(categoryName)
+    .then((res) => {
+      const j = res.data;
+      if (j.error == 0) {
+        const modal = document.getElementById("modal-one");
+        modal.classList.remove("open");
+        modal.classList.add("closed");
+        buildTable();
+      } else {
+        createToast(j.msg, "Warning");
+      }
+    })
+    .catch((err) => {
+      createToast(err.message, "Error");
+    });
 };
 
 export const getTotal = () => {
@@ -294,7 +320,7 @@ export const buildTable = () => {
       price
     )}</td><td>${getItemCategory(
       category
-    )}</td><td id="tr-${id}" style="cursor: pointer;" data-delete="${id}"><div style="text-align: center;" id="trash-${id}"</td></tr>`;
+    )}</td><td id="tr-${id}" style="cursor: pointer;" data-delete="${id}"><div style="text-align: center;" id="trash-${id}"></div></td></tr>`;
   });
   html += `<tr><td colspan="2"></td><td>${formatMoney(
     getTotal()
@@ -306,6 +332,7 @@ export const buildTable = () => {
   displayMostExpensive();
   addSvg();
   assignCaretEvent();
+  runCategoryCode();
 };
 
 buildTable();
@@ -508,3 +535,38 @@ const toastTest = () => {
 
 const toastButton = document.getElementById("toast-button");
 toastButton.addEventListener("click", toastTest);
+
+const modals = document.querySelectorAll("[data-modal]");
+
+modals.forEach(function (trigger) {
+  trigger.addEventListener("click", function (event) {
+    event.preventDefault();
+    const modal = document.getElementById(trigger.dataset.modal);
+    modal.classList.add("open");
+    const exits = modal.querySelectorAll(".modal-exit");
+    exits.forEach(function (exit) {
+      exit.addEventListener("click", function (event) {
+        event.preventDefault();
+        modal.classList.remove("open");
+      });
+    });
+  });
+});
+
+const showModal = () => {
+  const modal = document.getElementById("modal-one");
+  modal.classList.add("open");
+  const exits = modal.querySelectorAll(".modal-exit");
+  exits.forEach((exit) => {
+    exit.addEventListener("click", (e) => {
+      e.preventDefault();
+      modal.classList.remove("open");
+    });
+  });
+};
+
+const addButton = document.getElementById("add-button");
+addButton.addEventListener("click", showModal);
+
+const saveNewCategory = document.getElementById("save-new-category");
+saveNewCategory.addEventListener("click", saveCategoryToServer);
