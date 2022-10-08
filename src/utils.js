@@ -27,3 +27,15 @@ export const getTotal = (filteredData) => {
     return acc + +cur.price;
   }, 0);
 };
+
+export const getItemCategory = (c, state) => {
+  if (typeof c === "number") {
+    const categoryRecord = state.categories.find((cat) => cat.id === c);
+    if (categoryRecord) {
+      return categoryRecord.name;
+    } else {
+      return "";
+    }
+  }
+  return c;
+};
