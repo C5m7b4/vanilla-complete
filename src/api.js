@@ -1,9 +1,10 @@
-import axios from "axios";
+// import axios from "axios";
+import avion from "avion";
 import { state } from "./index";
 import { formatMoney } from "./utils";
 
 export async function saveEdits() {
-  let json = await axios({
+  let json = await avion({
     method: "PUT",
     cors: true,
     headers: {
@@ -22,7 +23,7 @@ export async function saveEdits() {
 }
 
 export async function updateData() {
-  let json = await axios({
+  let json = await avion({
     method: "POST",
     cors: true,
     headers: {
@@ -40,7 +41,7 @@ export async function updateData() {
 }
 
 export async function getData() {
-  let json = await axios({
+  let json = await avion({
     method: "GET",
     cors: true,
     headers: {
@@ -52,7 +53,7 @@ export async function getData() {
 }
 
 export async function getCategories() {
-  let json = await axios({
+  let json = await avion({
     method: "GET",
     cors: true,
     headers: {
@@ -64,7 +65,7 @@ export async function getCategories() {
 }
 
 export async function deleteItemFromSql(id) {
-  let json = await axios({
+  let json = await avion({
     method: "DELETE",
     cors: true,
     headers: {
@@ -79,7 +80,7 @@ export async function deleteItemFromSql(id) {
 }
 
 export async function sendCategory(name) {
-  let json = await axios({
+  let json = await avion({
     method: "POST",
     cors: true,
     headers: {
