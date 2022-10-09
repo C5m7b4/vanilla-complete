@@ -1071,4 +1071,8 @@ window.addEventListener("onAvionResponseReceived", () => {
 });
 ```
 
-Somewhat challenging, but I thought it would bring something neat to this project.
+Somewhat challenging, but I thought it would bring something neat to this project. Oh  yes, here is that output from a request:
+
+![alt avion-request](images/avion-request.png)
+
+![alt avion-response](images/avion-response.png)
