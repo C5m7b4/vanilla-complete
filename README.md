@@ -1003,5 +1003,72 @@ We are going to try to bring in avion and make some updates to that package. We 
 npm install avion react
 ```
 
-I switched over all the api calls to use avion and everthing seems to still be working. This is running avion version 0.0.16.
+I switched over all the api calls to use avion and everthing seems to still be working. This is running avion version 0.0.16. The code looks just the same, we are just switching out axios for avion.
 
+```js
+import avion from "avion";
+export async function getData() {
+  let json = await avion({
+    method: "GET",
+    cors: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    url: "http://localhost:3000/products",
+  });
+  return json;
+}
+```
+
+## branch 29
+
+This branch is a neat little experiment with avion. avion is a package that I wrote to act very similaryly to axios, but it was for my learning. It wraps xhr events into promises and returns them in such a way to allow you to use .then and .catch. The above implementation usually goes in an api file and then this is how I usually use it in my components, or in this case, in the index.js
+
+```js
+import {getData} from './api.js'
+export const getOurData = () => {
+  getData()
+    .then((res) => {
+      const j = res.data;
+      if (j.error === 0) {
+        data = j.data;
+        filteredData = j.data;
+        state.items = j.data;
+        window.dispatchEvent(dataLoaded);
+        buildTable();
+      } else {
+        createToast(j.msg, "warning");
+      }
+    })
+    .catch((err) => {
+      createToast(err.message, "Error");
+    });
+};s
+
+```
+
+Now for our experiment. I have modified avion with a queue and I have created three queues that you can access for things lik remove logging and such. For instance, if you are releasing a React Native app and need to remotely log the urls and responses the users are getting, then you can use this functionality to intercept all outgoing requests and well as their responses. This is what that would look like.
+
+First you must opt in to tell avion that you actually want it to put these things in a queue.
+
+```js
+avion.enableRequestQueue(true);
+avion.enableResponseQueue(true);
+avion.enableErrorQueue(true); // these all default to false
+```
+
+Now you can actually use these queues in your app
+
+```js
+window.addEventListener("onAvionRequestReceived", () => {
+  const firstQueuedItem = avion.requestQueue.dequeue();
+  console.log("avion request", firstQueuedItem);
+});
+
+window.addEventListener("onAvionResponseReceived", () => {
+  const firstItemDequeued = avion.responseQueue.dequeue();
+  console.log("avion response", firstItemDequeued);
+});
+```
+
+Somewhat challenging, but I thought it would bring something neat to this project.

@@ -9,6 +9,7 @@ import {
 } from "./api";
 import Box from "./Box";
 import { createToast } from "./toast";
+import avion from "avion";
 import "./styles.css";
 
 // we need to add an event that will let us know when the data is finished loading
@@ -20,6 +21,19 @@ window.addEventListener("onDataLoaded", () => {
 const categoriesLoaded = new CustomEvent("onCategoriesLoaded");
 window.addEventListener("onCategoriesLoaded", () => {
   runCategoryCode();
+});
+
+avion.enableRequestQueue(true);
+avion.enableResponseQueue(true);
+
+window.addEventListener("onAvionRequestReceived", () => {
+  const firstQueuedItem = avion.requestQueue.dequeue();
+  console.log("avion request", firstQueuedItem);
+});
+
+window.addEventListener("onAvionResponseReceived", () => {
+  const firstItemDequeued = avion.responseQueue.dequeue();
+  console.log("avion response", firstItemDequeued);
 });
 
 // create a toast container
