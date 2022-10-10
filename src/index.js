@@ -564,13 +564,50 @@ const applyDiscount = (price, discount) =>
 const r3 = applyDiscount("$5.00", "20%");
 console.log(r3);
 
-const findColor = (name) =>
-  ({
+// const findColor = (name) =>
+//   ({
+//     red: "#ff4444",
+//     blue: "#3b5998",
+//     yellow: "#fff68f",
+//   }[name]);
+
+// const findColor = (name) => {
+//   const colors = {
+//     red: "#ff4444",
+//     blue: "#3b5998",
+//     yellow: "#fff68f",
+//   };
+
+//   return colors[name];
+// };
+
+import { Left, Right } from "./Either";
+const findColor = (name) => {
+  const found = {
     red: "#ff4444",
     blue: "#3b5998",
     yellow: "#fff68f",
-  }[name]);
+  }[name];
+
+  return found ? Right(found) : Left("dunno");
+};
 
 // const res = findColor("red");
-const res = findColor("redd").toUpperCase();
-console.log(res);
+// const res = findColor("red")
+//   .map((x) => x.toUpperCase())
+//   .fold(
+//     () => "not found",
+//     (x) => x
+//   );
+// console.log(res);
+
+const res = () =>
+  findColor("red")
+    .map((x) => x.toUpperCase())
+    .map((x) => x.slice(1))
+    .fold(
+      () => "not found",
+      (x) => x
+    );
+
+console.log(res());
