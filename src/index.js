@@ -582,15 +582,15 @@ console.log(r3);
 // };
 
 import { Left, Right } from "./Either";
-const findColor = (name) => {
-  const found = {
-    red: "#ff4444",
-    blue: "#3b5998",
-    yellow: "#fff68f",
-  }[name];
+// const findColor = (name) => {
+//   const found = {
+//     red: "#ff4444",
+//     blue: "#3b5998",
+//     yellow: "#fff68f",
+//   }[name];
 
-  return found ? Right(found) : Left("dunno");
-};
+//   return found ? Right(found) : Left("dunno");
+// };
 
 // const res = findColor("red");
 // const res = findColor("red")
@@ -600,6 +600,41 @@ const findColor = (name) => {
 //     (x) => x
 //   );
 // console.log(res);
+
+// const res = () =>
+//   findColor("red")
+//     .map((x) => x.toUpperCase())
+//     .map((x) => x.slice(1))
+//     .fold(
+//       () => "not found",
+//       (x) => x
+//     );
+
+// console.log(res());
+
+// const fromNullable = (x) => (x != null ? Right(x) : Left());
+// triple equals does not work here
+// const fromNullable = (x) => {
+//   console.log(x);
+//   if (typeof x !== "undefined" && x !== null) {
+//     console.log("returning right");
+//     return Right(x);
+//   } else {
+//     console.log("returning left");
+//     return Left();
+//   }
+// };
+
+const fromNullable = (x) => (isValid(x) ? Right(x) : Left());
+
+const findColor = (name) =>
+  fromNullable(
+    {
+      red: "#ff4444",
+      blue: "#3b5998",
+      yellow: "#fff68f",
+    }[name]
+  );
 
 const res = () =>
   findColor("red")
