@@ -636,25 +636,101 @@ const findColor = (name) =>
     }[name]
   );
 
-const res = () =>
-  findColor("red")
-    .map((x) => x.toUpperCase())
-    .map((x) => x.slice(1))
-    .fold(
-      () => "not found",
-      (x) => x
-    );
+// const res = () =>
+//   findColor("red")
+//     .map((x) => x.toUpperCase())
+//     .map((x) => x.slice(1))
+//     .fold(
+//       () => "not found",
+//       (x) => x
+//     );
 
-console.log(res());
+// console.log(res());
 
 // understanding monads
 // this is essentially what they are doing
-const fn1 = (x) => {
-  return { foo: x.foo++ };
+// const fn1 = (x) => {
+//   return { foo: x.foo++ };
+// };
+
+// var d = { foo: 5 };
+// const p1 = Promise.resolve(d).then(fn1(d));
+// const p2 = p1.then((x) => Promise.resolve(d).then(fn1(d)));
+// const p3 = p2.then((x) => Promise.resolve(d).then(fn1(d)));
+// p3.then((x) => console.log(x));
+
+// write this after the initial function is shown on the screen
+const expect = (v) => {
+  return {
+    toEqual: (e) => {
+      console.log(
+        e === v
+          ? `success, expected ${JSON.stringify(e)} and got ${JSON.stringify(
+              v
+            )}`
+          : `expected ${JSON.stringify(e)} but received ${JSON.stringify(v)}`
+      );
+    },
+  };
 };
 
-var d = { foo: 5 };
-const p1 = Promise.resolve(d).then(fn1(d));
-const p2 = p1.then((x) => Promise.resolve(d).then(fn1(d)));
-const p3 = p2.then((x) => Promise.resolve(d).then(fn1(d)));
-p3.then((x) => console.log(x));
+const street_ = (user) => {
+  const address = user.address;
+
+  if (address) {
+    return address.street.name;
+  } else {
+    return "no street";
+  }
+};
+
+// const street = (user) =>
+//   Box(user)
+//     .map((x) => user.address)
+//     .map((x) => x.street)
+//     .map((x) => x.name)
+//     .fold((x) => x);
+
+const street = (user) =>
+  fromNullable(user)
+    .map((x) => x.address)
+    .map((x) => x.street)
+    .map((x) => x.name)
+    .fold(
+      () => "no street found",
+      (x) => x
+    );
+
+expect(street({ address: { street: { name: "Willow" } } })).toEqual("Willow");
+
+const streetName_ = (user) => {
+  const address = user.address;
+  if (address) {
+    const street = address.street;
+    if (street) {
+      return street.name;
+    }
+  }
+
+  return "no street";
+};
+
+const streetName = (user) =>
+  fromNullable(user)
+    .chain((x) => fromNullable(x.address))
+    .chain((x) => fromNullable(x.street))
+    .chain((x) => fromNullable(x.name))
+    .fold(
+      () => "yo man, I couldnt find a street",
+      (x) => x
+    );
+
+expect(streetName({ address: { street: { name: "Willow" } } })).toEqual(
+  "Willow"
+);
+console.log("test2");
+expect(streetName({})).toEqual("Willow");
+console.log("test3");
+expect(streetName({ address: {} })).toEqual("Willow");
+console.log("test4");
+expect(streetName({ address: { street: {} } }));
