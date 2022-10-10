@@ -373,6 +373,11 @@ const saveItem = () => {
 const saveButton = document.getElementById("save-item");
 saveButton.addEventListener("click", saveItem);
 
+const compose =
+  (...fns) =>
+  (...args) =>
+    fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
+
 function runSampleCode() {
   // lets add curry to the mix
   const filterData = (property) => {
@@ -394,10 +399,6 @@ function runSampleCode() {
       return acc.price > cur.price ? acc : cur;
     }, 0);
   };
-  const compose =
-    (...fns) =>
-    (...args) =>
-      fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
 
   const pipedFn = compose(
     findCategoryMostExpensiveItem,
@@ -627,14 +628,14 @@ import { Left, Right } from "./Either";
 
 const fromNullable = (x) => (isValid(x) ? Right(x) : Left());
 
-const findColor = (name) =>
-  fromNullable(
-    {
-      red: "#ff4444",
-      blue: "#3b5998",
-      yellow: "#fff68f",
-    }[name]
-  );
+// const findColor = (name) =>
+//   fromNullable(
+//     {
+//       red: "#ff4444",
+//       blue: "#3b5998",
+//       yellow: "#fff68f",
+//     }[name]
+//   );
 
 // const res = () =>
 //   findColor("red")
@@ -691,34 +692,41 @@ const street_ = (user) => {
 //     .map((x) => x.name)
 //     .fold((x) => x);
 
-const street = (user) =>
-  fromNullable(user)
-    .map((x) => x.address)
-    .map((x) => x.street)
-    .map((x) => x.name)
-    .fold(
-      () => "no street found",
-      (x) => x
-    );
+// const street = (user) =>
+//   fromNullable(user)
+//     .map((x) => x.address)
+//     .map((x) => x.street)
+//     .map((x) => x.name)
+//     .fold(
+//       () => "no street found",
+//       (x) => x
+//     );
 
-expect(street({ address: { street: { name: "Willow" } } })).toEqual("Willow");
+// expect(street({ address: { street: { name: "Willow" } } })).toEqual("Willow");
 
-const streetName_ = (user) => {
-  const address = user.address;
-  if (address) {
-    const street = address.street;
-    if (street) {
-      return street.name;
-    }
-  }
+// const streetName_ = (user) => {
+//   const address = user.address;
+//   if (address) {
+//     const street = address.street;
+//     if (street) {
+//       return street.name;
+//     }
+//   }
 
-  return "no street";
+//   return "no street";
+// };
+
+const logIt = (x) => {
+  console.log("logIt", x);
+  return x;
 };
 
 const streetName = (user) =>
-  fromNullable(user)
+  logIt(fromNullable(user))
     .chain((x) => fromNullable(x.address))
+    .map(logIt)
     .chain((x) => fromNullable(x.street))
+    .map(logIt)
     .chain((x) => fromNullable(x.name))
     .fold(
       () => "yo man, I couldnt find a street",
@@ -728,9 +736,37 @@ const streetName = (user) =>
 expect(streetName({ address: { street: { name: "Willow" } } })).toEqual(
   "Willow"
 );
-console.log("test2");
-expect(streetName({})).toEqual("Willow");
-console.log("test3");
-expect(streetName({ address: {} })).toEqual("Willow");
-console.log("test4");
-expect(streetName({ address: { street: {} } }));
+// console.log("test2");
+// expect(streetName({})).toEqual("Willow");
+// console.log("test3");
+// expect(streetName({ address: {} })).toEqual("Willow");
+// console.log("test4");
+// expect(streetName({ address: { street: {} } }));
+
+console.log(Right(2).toString());
+
+const Box1 = (f) => ({
+  map: (g) => Box1(compose(f, g)),
+  fold: f,
+  toString: () => `Box (${f()})`,
+});
+
+const createTwo = () => {
+  console.log("creating 2");
+  return 2;
+};
+const addOne = (v) => {
+  console.log("adding one to ", v);
+  return v + 1;
+};
+
+// this is absolutely nuts, it looks backwards
+const r5 = Box1(addOne)
+  .map((two) => createTwo(two))
+  .fold((x) => x);
+console.log(r5);
+
+// const r6 = Box1(() => 2)
+//   .map((two) => two + 1)
+//   .toString();
+// console.log(r6);
