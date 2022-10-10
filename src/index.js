@@ -27,13 +27,13 @@ avion.enableRequestQueue(true);
 avion.enableResponseQueue(true);
 
 window.addEventListener("onAvionRequestReceived", () => {
-  const firstQueuedItem = avion.requestQueue.dequeue();
-  console.log("avion request", firstQueuedItem);
+  //const firstQueuedItem = avion.requestQueue.dequeue();
+  //console.log("avion request", firstQueuedItem);
 });
 
 window.addEventListener("onAvionResponseReceived", () => {
-  const firstItemDequeued = avion.responseQueue.dequeue();
-  console.log("avion response", firstItemDequeued);
+  // firstItemDequeued = avion.responseQueue.dequeue();
+  //console.log("avion response", firstItemDequeued);
 });
 
 // create a toast container
@@ -137,7 +137,7 @@ export const getOurData = () => {
     });
 };
 
-getOurData();
+//getOurData();
 
 const getOurCategories = () => {
   getCategories()
@@ -156,7 +156,7 @@ const getOurCategories = () => {
     });
 };
 
-getOurCategories();
+//getOurCategories();
 
 export let filteredData = data;
 
@@ -217,7 +217,7 @@ const displayMostExpensive = () => {
 };
 
 const buildDeleteLinks = () => {
-  console.log("building delete links");
+  //console.log("building delete links");
   const deletes = document.querySelectorAll("td[data-delete]");
   for (let del of deletes) {
     del.addEventListener("click", (e) => {
@@ -508,3 +508,69 @@ addButton.addEventListener("click", showModal);
 
 const saveNewCategory = document.getElementById("save-new-category");
 saveNewCategory.addEventListener("click", saveCategoryToServer);
+
+// functional composition
+//const moneyToFloat_ = (str) => parseFloat(str.replace(/\$/, ""));
+
+const moneyToFloat = (str) =>
+  Box(str)
+    .map((x) => x.replace(/\$/, ""))
+    .map((x) => parseFloat(x))
+    .map((x) => x.toFixed(2))
+    .fold((x) => x);
+
+console.log("box value", moneyToFloat("$5.00"));
+
+const percentToFloat_ = (str) => {
+  const float = parseFloat(str.replace(/%/, ""));
+  return float * 0.01;
+};
+
+const percentToFloat = (str) =>
+  Box(str)
+    .map((x) => x.replace(/%/, ""))
+    .map((x) => parseFloat(x))
+    .fold((x) => x * 0.01);
+
+console.log(percentToFloat("20%"));
+
+const applyDiscount_ = (price, discount) => {
+  const cents = moneyToFloat(price);
+  const savings = percentToFloat(discount);
+  return cents - cents * savings;
+};
+
+// working example
+const applyDiscount_1 = (price, discount) =>
+  Box(price).map((x) =>
+    Box(moneyToFloat(x)).map(
+      (cents) => (cents = cents - cents * percentToFloat(discount))
+    )
+  );
+
+const applyDiscount_2 = (price, discount) =>
+  Box(moneyToFloat(price)).map((cents) =>
+    Box(percentToFloat(discount)).map((savings) => cents - cents * savings)
+  );
+
+const applyDiscount = (price, discount) =>
+  Box(moneyToFloat(price)).chain((cents) =>
+    Box(percentToFloat(discount))
+      .map((savings) => cents - cents * savings)
+      .map((x) => parseFloat(x))
+      .map((x) => x.toFixed(2))
+      .fold((x) => `$${x}`)
+  );
+const r3 = applyDiscount("$5.00", "20%");
+console.log(r3);
+
+const findColor = (name) =>
+  ({
+    red: "#ff4444",
+    blue: "#3b5998",
+    yellow: "#fff68f",
+  }[name]);
+
+// const res = findColor("red");
+const res = findColor("redd").toUpperCase();
+console.log(res);

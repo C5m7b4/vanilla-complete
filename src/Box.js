@@ -1,7 +1,8 @@
 const Box = (x) => ({
   map: (f) => Box(f(x)),
-  inspect: `Box${x}`,
+  inspect: `Box:${JSON.stringify(x)}`,
   fold: (f) => f(x),
+  chain: (f) => f(x),
 });
 
 export default Box;
