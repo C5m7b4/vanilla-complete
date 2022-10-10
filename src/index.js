@@ -646,3 +646,15 @@ const res = () =>
     );
 
 console.log(res());
+
+// understanding monads
+// this is essentially what they are doing
+const fn1 = (x) => {
+  return { foo: x.foo++ };
+};
+
+var d = { foo: 5 };
+const p1 = Promise.resolve(d).then(fn1(d));
+const p2 = p1.then((x) => Promise.resolve(d).then(fn1(d)));
+const p3 = p2.then((x) => Promise.resolve(d).then(fn1(d)));
+p3.then((x) => console.log(x));
