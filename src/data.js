@@ -1,4 +1,4 @@
-export const data = [
+export const food = [
   { id: 1, name: "apple", price: 0.99, size: "each", category: "fruit" },
   { id: 2, name: "bananna", price: 1.1, size: "each", category: "fruit" },
   { id: 3, name: "grapes", price: 1.99, size: "bundle", category: "fruit" },
