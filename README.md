@@ -357,6 +357,13 @@ module.exports = {
 };
 ```
 
+Let's install one more package:
+
+```js
+npm install --save-dev @babel/eslint-parser
+
+```
+
 Ok, making progress. Now let's create a file in the root of our project called .eslintrc.json and it should look something like this:
 
 ```json
@@ -366,6 +373,7 @@ Ok, making progress. Now let's create a file in the root of our project called .
     "plugin:import/errors",
     "prettier"
   ],
+  "parser": "@babel/eslint-parser",
   "rules":{
     "no-console": 0,
     "no-debugger": 1,
