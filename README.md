@@ -44,7 +44,7 @@ git push -u origin master
 On a side note, if you don't already have node installed and you are on windows, visit [this link](https://github.com/coreybutler/nvm-windows#installation--upgrades) to install it. To use it in each project, simply type:
 
 ```js
-nvm install lts
+nvm install --lts
 ```
 
 Optionally, to see a list of all versions available you can type
