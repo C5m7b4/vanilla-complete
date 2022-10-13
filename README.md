@@ -87,7 +87,7 @@ Now let's install the html-webpack-plugin
 npm install --save-dev html-webpack-plugin
 ```
 
-Now let's build our webpack config file and it should look like this:
+Now let's build our webpack config file and it should look like this (webpack.config.js):
 
 ```js
 const path = require('path');
@@ -119,6 +119,10 @@ module.exports = {
 ```
 
 Now let's create our src folder and add an index.js file with nothing but a console log statement so we can make sure that things are working. Then we need to add a script to the package.json so we can test out our work.
+
+```js
+"start": "webpack server --open"
+```
 
 run this command
 
